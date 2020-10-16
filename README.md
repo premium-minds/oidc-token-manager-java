@@ -1,6 +1,6 @@
 # OIDC Client Token Manager for Java
 
-Library to help manage access token from an OIDC provider.
+This library handles the server 2 server tokens from and OIDC provider.
 
 ## Maven project
 ![Maven Central](https://img.shields.io/maven-central/v/com.premiumminds.oidc/oidc-token-manager)
@@ -20,8 +20,9 @@ Check out [sonatype repository](https://oss.sonatype.org/index.html#nexus-search
 
 Include the [Nimbus OAuth 2.0 SDK with OpenID Connect extensions](https://search.maven.org/search?q=a:oauth2-oidc-sdk) to your maven project.
 
-    TokenManager tokenManager = new NimbusOIDCTokenManagerBuilder(new URI("http://provider/token"), "client_id")
-        .clientSecret("client_secret").build();
+    TokenManager<BearerAccessToken> tokenManager = 
+        new NimbusOIDCTokenManagerBuilder(new URI("http://provider/token"), "client_id")
+            .clientSecret("client_secret").build();
     BearerAccessToken token = tokenManager.getAccessToken();
 
 ## Continuous Integration

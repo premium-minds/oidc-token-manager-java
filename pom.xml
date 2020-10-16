@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.premiumminds.oidc</groupId>
@@ -7,7 +9,8 @@
     <packaging>jar</packaging>
 
     <name>OpenID Connector Token Manager Client for Java</name>
-    <description>this library handles the server 2 server tokens with authentication using oidc password flow</description>
+    <description>this library handles the server 2 server tokens from and OIDC provider
+    </description>
     <inceptionYear>2020</inceptionYear>
 
     <organization>
@@ -27,7 +30,8 @@
     <scm>
         <url>https://github.com/premium-minds/oidc-token-manager-java</url>
         <connection>scm:git:git@github.com:premium-minds/oidc-token-manager-java.git</connection>
-        <developerConnection>scm:git:git@github.com:premium-minds/oidc-token-manager-java.git</developerConnection>
+        <developerConnection>scm:git:git@github.com:premium-minds/oidc-token-manager-java.git
+        </developerConnection>
         <tag>HEAD</tag>
     </scm>
 
@@ -212,13 +216,13 @@
         <snapshotRepository>
             <id>premiumminds-nexus-snapshots</id>
             <name>premiumminds-nexus-snapshots</name>
-            <url>https://oss.sonatype.org/content/repositories/snapshots </url>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
 
         <repository>
             <id>premiumminds-nexus-staging</id>
             <name>premiumminds-nexus-staging</name>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2 </url>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
         </repository>
 
     </distributionManagement>
