@@ -12,6 +12,7 @@ import com.nimbusds.openid.connect.sdk.op.OIDCProviderMetadata;
 import com.premiumminds.oidc.TokenManager;
 import com.premiumminds.oidc.TokenManagerImpl;
 import java.net.URI;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Token manager using the Nimbus OAuth 2.0 SDK with OpenID Connect extensions.
@@ -188,32 +189,62 @@ public class NimbusOIDCTokenManagerBuilder {
     }
 
     /**
-     * Set the connect timeout in milliseconds. If the value is 0, it will wait
-     * infinitely.
+     * Set the connect timeout in milliseconds. If the value is 0 it means no timeout.
      * <p>
-     * Default: 30 seconds
+     * Default: 5 seconds
      *
-     * @param connectTimeout
+     * @param timeout
      *         timeout in milliseconds
      * @return the builder
      */
-    public NimbusOIDCTokenManagerBuilder connectTimeout(int connectTimeout) {
-        this.connectTimeout = connectTimeout;
+    public NimbusOIDCTokenManagerBuilder connectTimeout(int timeout) {
+        this.connectTimeout = timeout;
         return this;
     }
 
     /**
-     * Set the read timeout in milliseconds. If the value is 0, it will wait
-     * infinitely.
+     * Set the connect timeout. If the value is 0 it means no timeout.
      * <p>
-     * Default: 30 seconds
+     * Default: 5 seconds
      *
-     * @param readTimeout
+     * @param timeout
+     *         timeout value
+     * @param unit
+     *         timeout unit
+     * @return the builder
+     */
+    public NimbusOIDCTokenManagerBuilder connectTimeout(int timeout, TimeUnit unit) {
+        this.connectTimeout = (int) unit.toMillis(timeout);
+        return this;
+    }
+
+    /**
+     * Set the read timeout in milliseconds. If the value is 0 it means no timeout.
+     * <p>
+     * Default: 5 seconds
+     *
+     * @param timeout
      *         timeout in milliseconds
      * @return the builder
      */
-    public NimbusOIDCTokenManagerBuilder readTimeout(int readTimeout) {
-        this.readTimeout = readTimeout;
+    public NimbusOIDCTokenManagerBuilder readTimeout(int timeout) {
+        this.readTimeout = timeout;
+        return this;
+    }
+
+    /**
+     * Set the read timeout. If the value is 0 it means no timeout.
+     * <p>
+     * Default: 5 seconds
+     *
+     * @param timeout
+     *         timeout value
+     * @param unit
+     *         timeout unit
+     * @return the builder
+     */
+    public NimbusOIDCTokenManagerBuilder readTimeout(int timeout, TimeUnit unit) {
+        this.readTimeout = (int) unit.toMillis(timeout);
         return this;
     }
 
