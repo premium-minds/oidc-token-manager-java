@@ -36,8 +36,13 @@ public class TokenManagerImpl<T, R> implements TokenManager<T> {
     }
 
     private void refreshToken() {
-        tokens = provider.refreshToken(tokens.getRefreshToken());
-        calculateValidity();
+        try {
+            tokens = provider.refreshToken(tokens.getRefreshToken());
+            calculateValidity();
+        } catch (Exception e) {
+            // something went wrong, let's try the grant method
+            grantToken();
+        }
     }
 
     private void grantToken() {

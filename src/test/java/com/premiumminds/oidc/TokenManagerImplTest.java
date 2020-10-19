@@ -69,12 +69,38 @@ public class TokenManagerImplTest {
         Assertions.assertTrue(provider.refreshTokenCalled);
     }
 
+    @Test
+    public void testValidityExpiredWithRefreshTokenButInvalid() throws InterruptedException {
+        OpenIDProviderTest provider = new OpenIDProviderTest("accessToken", "refreshToken", 100);
+        TokenManager<String> tokenManager = new TokenManagerImpl<>(provider, 0);
+
+        tokenManager.getAccessToken();
+        provider.reset();
+        provider.failRefreshToken = true;
+        tokenManager.getAccessToken();
+        Assertions.assertFalse(provider.grantTokenCalled);
+        Assertions.assertFalse(provider.refreshTokenCalled);
+
+        Thread.sleep(101);
+
+        String accessToken = tokenManager.getAccessToken();
+
+        Assertions.assertEquals("accessToken", accessToken);
+        Assertions.assertTrue(provider.grantTokenCalled);
+        Assertions.assertTrue(provider.refreshTokenCalled);
+    }
+
     public static class OpenIDProviderTest implements OpenIDProvider<String, String> {
         private boolean refreshTokenCalled;
+
         private boolean grantTokenCalled;
 
+        private boolean failRefreshToken = false;
+
         private String accessToken;
+
         private String refreshToken;
+
         private int expiresIn;
 
         public OpenIDProviderTest(String accessToken, String refreshToken, int expiresIn) {
@@ -86,6 +112,9 @@ public class TokenManagerImplTest {
         @Override
         public Tokens refreshToken(String refreshToken) {
             this.refreshTokenCalled = true;
+            if (failRefreshToken) {
+                throw new RuntimeException("failing refresh token");
+            }
             return new Tokens(accessToken, this.refreshToken, expiresIn);
         }
 
@@ -98,6 +127,7 @@ public class TokenManagerImplTest {
         private void reset() {
             this.refreshTokenCalled = false;
             this.grantTokenCalled = false;
+            this.failRefreshToken = false;
         }
     }
 }
