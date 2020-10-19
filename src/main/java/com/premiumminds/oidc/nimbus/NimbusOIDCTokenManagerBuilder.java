@@ -35,11 +35,11 @@ public class NimbusOIDCTokenManagerBuilder {
 
     private Scope scope = new Scope();
 
-    private int connectTimeout = 30000; // 30 seconds
+    private int connectTimeout = 5000; // default 5 seconds
 
-    private int readTimeout = 30000; // 30 seconds
+    private int readTimeout = 5000; // default 5 seconds
 
-    private int expireThreshold = 5000; // 5 seconds
+    private int expireThreshold = 5000; // default 5 seconds
 
     /**
      * Create a new builder
