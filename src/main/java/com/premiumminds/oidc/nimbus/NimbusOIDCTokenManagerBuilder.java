@@ -18,10 +18,10 @@ import java.net.URI;
  * <p>
  * To use this class, the project must include:
  * <pre>
- *      <dependency>
- *          <groupId>com.nimbusds</groupId>
- *          <artifactId>oauth2-oidc-sdk</artifactId>
- *      </dependency>
+ *      &lt;dependency&gt;
+ *          &lt;groupId&gt;com.nimbusds&lt;/groupId&gt;
+ *          &lt;artifactId&gt;oauth2-oidc-sdk&lt;/artifactId&gt;
+ *      &lt;/dependency&gt;
  * </pre>
  */
 public class NimbusOIDCTokenManagerBuilder {
