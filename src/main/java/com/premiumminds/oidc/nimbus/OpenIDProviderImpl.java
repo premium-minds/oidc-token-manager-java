@@ -21,9 +21,10 @@ import com.premiumminds.oidc.OpenIDProvider;
 import com.premiumminds.oidc.Tokens;
 import java.io.IOException;
 import java.net.URI;
+import java.util.function.Supplier;
 
 class OpenIDProviderImpl implements OpenIDProvider<BearerAccessToken, RefreshToken> {
-    private final URI tokenEndpoint;
+    private final Supplier<URI> tokenEndpoint;
 
     private final ClientID clientID;
 
@@ -37,7 +38,7 @@ class OpenIDProviderImpl implements OpenIDProvider<BearerAccessToken, RefreshTok
 
     private final int readTimeout;
 
-    public OpenIDProviderImpl(URI tokenEndpoint, ClientID clientID, Secret clientSecret,
+    public OpenIDProviderImpl(Supplier<URI> tokenEndpoint, ClientID clientID, Secret clientSecret,
             AuthorizationGrant authorizationGrant, Scope scope, int connectTimeout, int readTimeout) {
         this.tokenEndpoint = tokenEndpoint;
         this.clientID = clientID;
@@ -61,9 +62,10 @@ class OpenIDProviderImpl implements OpenIDProvider<BearerAccessToken, RefreshTok
     private Tokens<BearerAccessToken, RefreshToken> tokenRequest(AuthorizationGrant authzGrant) {
         TokenRequest request;
         if (clientSecret != null) {
-            request = new TokenRequest(tokenEndpoint, new ClientSecretBasic(clientID, clientSecret), authzGrant, scope);
+            request = new TokenRequest(tokenEndpoint.get(), new ClientSecretBasic(clientID, clientSecret), authzGrant,
+                    scope);
         } else {
-            request = new TokenRequest(tokenEndpoint, clientID, authzGrant, scope);
+            request = new TokenRequest(tokenEndpoint.get(), clientID, authzGrant, scope);
         }
 
         HTTPRequest httpRequest = request.toHTTPRequest();

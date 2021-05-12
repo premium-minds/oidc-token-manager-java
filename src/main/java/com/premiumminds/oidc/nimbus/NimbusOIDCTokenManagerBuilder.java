@@ -13,6 +13,7 @@ import com.premiumminds.oidc.TokenManager;
 import com.premiumminds.oidc.TokenManagerImpl;
 import java.net.URI;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 /**
  * Token manager using the Nimbus OAuth 2.0 SDK with OpenID Connect extensions.
@@ -26,7 +27,7 @@ import java.util.concurrent.TimeUnit;
  * </pre>
  */
 public class NimbusOIDCTokenManagerBuilder {
-    private final URI providerTokenEndpoint;
+    private final Supplier<URI> providerTokenEndpoint;
 
     private final ClientID clientID;
 
@@ -52,7 +53,7 @@ public class NimbusOIDCTokenManagerBuilder {
      */
     public NimbusOIDCTokenManagerBuilder(AuthorizationServerEndpointMetadata providerEndpointMetadata,
             ClientID clientID) {
-        this.providerTokenEndpoint = providerEndpointMetadata.getTokenEndpointURI();
+        this.providerTokenEndpoint = () -> providerEndpointMetadata.getTokenEndpointURI();
         this.clientID = clientID;
     }
 
@@ -65,7 +66,7 @@ public class NimbusOIDCTokenManagerBuilder {
      *         client id
      */
     public NimbusOIDCTokenManagerBuilder(OIDCProviderMetadata metadata, ClientID clientID) {
-        this.providerTokenEndpoint = metadata.getTokenEndpointURI();
+        this.providerTokenEndpoint = () -> metadata.getTokenEndpointURI();
         this.clientID = clientID;
     }
 
@@ -78,6 +79,19 @@ public class NimbusOIDCTokenManagerBuilder {
      *         client id
      */
     public NimbusOIDCTokenManagerBuilder(URI tokenEndpoint, ClientID clientID) {
+        this.providerTokenEndpoint = () -> tokenEndpoint;
+        this.clientID = clientID;
+    }
+
+    /**
+     * Create a new builder
+     *
+     * @param tokenEndpoint
+     *         token endpoint supplier
+     * @param clientID
+     *         client id
+     */
+    public NimbusOIDCTokenManagerBuilder(Supplier<URI> tokenEndpoint, ClientID clientID) {
         this.providerTokenEndpoint = tokenEndpoint;
         this.clientID = clientID;
     }
@@ -92,7 +106,7 @@ public class NimbusOIDCTokenManagerBuilder {
      */
     public NimbusOIDCTokenManagerBuilder(AuthorizationServerEndpointMetadata providerEndpointMetadata,
             String clientID) {
-        this.providerTokenEndpoint = providerEndpointMetadata.getTokenEndpointURI();
+        this.providerTokenEndpoint = () -> providerEndpointMetadata.getTokenEndpointURI();
         this.clientID = new ClientID(clientID);
     }
 
@@ -105,7 +119,7 @@ public class NimbusOIDCTokenManagerBuilder {
      *         client id
      */
     public NimbusOIDCTokenManagerBuilder(OIDCProviderMetadata metadata, String clientID) {
-        this.providerTokenEndpoint = metadata.getTokenEndpointURI();
+        this.providerTokenEndpoint = () -> metadata.getTokenEndpointURI();
         this.clientID = new ClientID(clientID);
     }
 
@@ -118,6 +132,19 @@ public class NimbusOIDCTokenManagerBuilder {
      *         client id
      */
     public NimbusOIDCTokenManagerBuilder(URI tokenEndpoint, String clientID) {
+        this.providerTokenEndpoint = () -> tokenEndpoint;
+        this.clientID = new ClientID(clientID);
+    }
+
+    /**
+     * Create a new builder
+     *
+     * @param tokenEndpoint
+     *         token endpoint supplier
+     * @param clientID
+     *         client id
+     */
+    public NimbusOIDCTokenManagerBuilder(Supplier<URI> tokenEndpoint, String clientID) {
         this.providerTokenEndpoint = tokenEndpoint;
         this.clientID = new ClientID(clientID);
     }
