@@ -11,7 +11,7 @@ Add the following maven dependency to your project `pom.xml`:
 <dependency>
    <groupId>com.premiumminds.oidc</groupId>
    <artifactId>oidc-token-manager</artifactId>
-   <version>1.0</version>
+   <version>1.1</version>
 </dependency>
 ```
 Check out [sonatype repository](https://oss.sonatype.org/index.html#nexus-search;quick~oidc-token-manager) for latest snapshots and releases.
