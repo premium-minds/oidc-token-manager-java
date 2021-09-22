@@ -94,7 +94,7 @@ class OpenIDProviderImpl implements OpenIDProvider<BearerAccessToken, RefreshTok
         com.nimbusds.oauth2.sdk.token.Tokens tokens = oidcTokenResponse.getTokens();
 
         return new Tokens<>(tokens.getBearerAccessToken(), tokens.getRefreshToken(),
-                tokens.getBearerAccessToken().getLifetime());
+                tokens.getBearerAccessToken().getLifetime() * 1000);
 
     }
 }

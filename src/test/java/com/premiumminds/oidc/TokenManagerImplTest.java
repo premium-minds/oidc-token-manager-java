@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 public class TokenManagerImplTest {
     @Test
     public void testGrantToken() {
-        OpenIDProviderTest provider = new OpenIDProviderTest("accessToken", "refreshToken", 100);
+        OpenIDProviderTest provider = new OpenIDProviderTest("accessToken", "refreshToken", 1000); // 1 second
         TokenManager<String> tokenManager = new TokenManagerImpl<>(provider, 0);
 
         String accessToken = tokenManager.getAccessToken();
@@ -32,7 +32,7 @@ public class TokenManagerImplTest {
 
     @Test
     public void testValidityExpiredWithoutRefreshToken() throws InterruptedException {
-        OpenIDProviderTest provider = new OpenIDProviderTest("accessToken", null, 100);
+        OpenIDProviderTest provider = new OpenIDProviderTest("accessToken", null,  1000); // 1 second
         TokenManager<String> tokenManager = new TokenManagerImpl<>(provider, 0);
 
         tokenManager.getAccessToken();
@@ -40,7 +40,7 @@ public class TokenManagerImplTest {
         tokenManager.getAccessToken();
         Assertions.assertFalse(provider.refreshTokenCalled);
 
-        Thread.sleep(101);
+        Thread.sleep(1001); // 1 seconds and 1 millisecond
 
         String accessToken = tokenManager.getAccessToken();
 
@@ -51,7 +51,7 @@ public class TokenManagerImplTest {
 
     @Test
     public void testValidityExpiredWithRefreshToken() throws InterruptedException {
-        OpenIDProviderTest provider = new OpenIDProviderTest("accessToken", "refreshToken", 100);
+        OpenIDProviderTest provider = new OpenIDProviderTest("accessToken", "refreshToken", 1000); // 1 second
         TokenManager<String> tokenManager = new TokenManagerImpl<>(provider, 0);
 
         tokenManager.getAccessToken();
@@ -60,7 +60,27 @@ public class TokenManagerImplTest {
         Assertions.assertFalse(provider.grantTokenCalled);
         Assertions.assertFalse(provider.refreshTokenCalled);
 
-        Thread.sleep(101);
+        Thread.sleep(1001); // 1 seconds and 1 millisecond
+
+        String accessToken = tokenManager.getAccessToken();
+
+        Assertions.assertEquals("accessToken", accessToken);
+        Assertions.assertFalse(provider.grantTokenCalled);
+        Assertions.assertTrue(provider.refreshTokenCalled);
+    }
+
+    @Test
+    public void testValidityExpiredWithExpireThreshold() throws InterruptedException {
+        OpenIDProviderTest provider = new OpenIDProviderTest("accessToken", "refreshToken", 6000); // 6 second
+        TokenManager<String> tokenManager = new TokenManagerImpl<>(provider, 5000); // 5 seconds
+
+        tokenManager.getAccessToken();
+        provider.reset();
+        tokenManager.getAccessToken();
+        Assertions.assertFalse(provider.grantTokenCalled);
+        Assertions.assertFalse(provider.refreshTokenCalled);
+
+        Thread.sleep(1001); // 1 seconds and 1 millisecond
 
         String accessToken = tokenManager.getAccessToken();
 
@@ -71,7 +91,7 @@ public class TokenManagerImplTest {
 
     @Test
     public void testValidityExpiredWithRefreshTokenButInvalid() throws InterruptedException {
-        OpenIDProviderTest provider = new OpenIDProviderTest("accessToken", "refreshToken", 100);
+        OpenIDProviderTest provider = new OpenIDProviderTest("accessToken", "refreshToken", 1000); // 1 seconds
         TokenManager<String> tokenManager = new TokenManagerImpl<>(provider, 0);
 
         tokenManager.getAccessToken();
@@ -81,7 +101,7 @@ public class TokenManagerImplTest {
         Assertions.assertFalse(provider.grantTokenCalled);
         Assertions.assertFalse(provider.refreshTokenCalled);
 
-        Thread.sleep(101);
+        Thread.sleep(1001); // 1 seconds and 1 millisecond
 
         String accessToken = tokenManager.getAccessToken();
 
