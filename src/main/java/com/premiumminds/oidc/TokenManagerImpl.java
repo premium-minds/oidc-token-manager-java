@@ -9,6 +9,12 @@ public class TokenManagerImpl<T, R> implements TokenManager<T> {
 
     private OpenIDProvider<T, R> provider;
 
+    /**
+     * Create new TokenManager with OpenID provider and a expire threshold for access token expiration
+     *
+     * @param provider OpenID provider
+     * @param expireThreshold number of milliseconds of the threshold before access token expires
+     */
     public TokenManagerImpl(OpenIDProvider<T, R> provider, int expireThreshold) {
         this.expireThreshold = expireThreshold;
         this.provider = provider;
