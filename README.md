@@ -27,9 +27,7 @@ Include the [Nimbus OAuth 2.0 SDK with OpenID Connect extensions](https://search
 
 ## Continuous Integration
 
-[![Build Status](https://travis-ci.org/premium-minds/oidc-token-manager-java.png?branch=master)](https://travis-ci.org/premium-minds/oidc-token-manager-java)
-
-CI is hosted by [travis-ci.org](https://travis-ci.org/)
+[![Java CI with Maven](https://github.com/premium-minds/oidc-token-manager-java/actions/workflows/maven.yml/badge.svg)](https://github.com/premium-minds/oidc-token-manager-java/actions/workflows/maven.yml)
 
 ## Licence
 
