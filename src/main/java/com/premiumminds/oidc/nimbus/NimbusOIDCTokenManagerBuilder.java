@@ -12,6 +12,9 @@ import com.nimbusds.openid.connect.sdk.op.OIDCProviderMetadata;
 import com.premiumminds.oidc.TokenManager;
 import com.premiumminds.oidc.TokenManagerImpl;
 import java.net.URI;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
@@ -42,6 +45,8 @@ public class NimbusOIDCTokenManagerBuilder {
     private int readTimeout = 5000; // default 5 seconds
 
     private int expireThreshold = 5000; // default 5 seconds
+
+    private Map<String, List<String>> headers = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
     /**
      * Create a new builder
@@ -290,6 +295,21 @@ public class NimbusOIDCTokenManagerBuilder {
     }
 
     /**
+     * Set headers for the request to the token endpoint.
+     * <p>
+     * Default: empty map
+     *
+     * @param headers
+     *         map of header (name: values)
+     * @return
+     */
+    public NimbusOIDCTokenManagerBuilder headers(Map<String, List<String>> headers) {
+        this.headers.clear();
+        this.headers.putAll(headers);
+        return this;
+    }
+
+    /**
      * Build a new TokenManager
      *
      * @return the token manager
@@ -297,7 +317,7 @@ public class NimbusOIDCTokenManagerBuilder {
     public TokenManager<BearerAccessToken> build() {
         OpenIDProviderImpl provider =
                 new OpenIDProviderImpl(providerTokenEndpoint, clientID, clientSecret, authorizationGrant, scope,
-                        connectTimeout, readTimeout);
+                        connectTimeout, readTimeout, headers);
 
         return new TokenManagerImpl<>(provider, expireThreshold);
     }
