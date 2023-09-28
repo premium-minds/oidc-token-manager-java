@@ -12,6 +12,11 @@ import com.nimbusds.openid.connect.sdk.op.OIDCProviderMetadata;
 import com.premiumminds.oidc.TokenManager;
 import com.premiumminds.oidc.TokenManagerImpl;
 import java.net.URI;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
@@ -42,6 +47,8 @@ public class NimbusOIDCTokenManagerBuilder {
     private int readTimeout = 5000; // default 5 seconds
 
     private int expireThreshold = 5000; // default 5 seconds
+
+    private final Map<String, List<String>> headers = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
     /**
      * Create a new builder
@@ -194,7 +201,7 @@ public class NimbusOIDCTokenManagerBuilder {
      *         username
      * @param password
      *         password
-     * @return this builder
+     * @return the builder
      */
     public NimbusOIDCTokenManagerBuilder authentication(String username, String password) {
         this.authorizationGrant = new ResourceOwnerPasswordCredentialsGrant(username, new Secret(password));
@@ -282,10 +289,57 @@ public class NimbusOIDCTokenManagerBuilder {
      *
      * @param expireThreshold
      *         value in milliseconds
-     * @return
+     * @return the builder
      */
     public NimbusOIDCTokenManagerBuilder expireThreshold(int expireThreshold) {
         this.expireThreshold = expireThreshold;
+        return this;
+    }
+
+    /**
+     * Set headers for the request to the token endpoint.
+     * <p>
+     * Default: empty map
+     *
+     * @param headers
+     *         map of header (name: values)
+     * @return the builder
+     */
+    public NimbusOIDCTokenManagerBuilder headers(Map<String, List<String>> headers) {
+        this.headers.clear();
+        this.headers.putAll(headers);
+        return this;
+    }
+
+    /**
+     * Add header for the request to the token endpoint.
+     * This will append the pair (name:value) to the existing headers
+     *
+     * @param name
+     *         the header name
+     *
+     * @param value
+     *         the header value
+     * @return the builder
+     */
+    public NimbusOIDCTokenManagerBuilder header(String name, String value) {
+        this.headers.put(name, Collections.singletonList(value));
+        return this;
+    }
+
+    /**
+     * Add header for the request to the token endpoint.
+     * This will append the pair (name:values) to the existing headers
+     *
+     * @param name
+     *         the header name
+     *
+     * @param values
+     *         a list of header values
+     * @return the builder
+     */
+    public NimbusOIDCTokenManagerBuilder header(String name, List<String> values) {
+        this.headers.put(name, values);
         return this;
     }
 
@@ -297,7 +351,7 @@ public class NimbusOIDCTokenManagerBuilder {
     public TokenManager<BearerAccessToken> build() {
         OpenIDProviderImpl provider =
                 new OpenIDProviderImpl(providerTokenEndpoint, clientID, clientSecret, authorizationGrant, scope,
-                        connectTimeout, readTimeout);
+                        connectTimeout, readTimeout, headers);
 
         return new TokenManagerImpl<>(provider, expireThreshold);
     }

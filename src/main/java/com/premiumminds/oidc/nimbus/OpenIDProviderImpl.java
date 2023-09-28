@@ -21,6 +21,9 @@ import com.premiumminds.oidc.OpenIDProvider;
 import com.premiumminds.oidc.Tokens;
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.Supplier;
 
 class OpenIDProviderImpl implements OpenIDProvider<BearerAccessToken, RefreshToken> {
@@ -38,8 +41,10 @@ class OpenIDProviderImpl implements OpenIDProvider<BearerAccessToken, RefreshTok
 
     private final int readTimeout;
 
+    private final Map<String, List<String>> headers;
+
     public OpenIDProviderImpl(Supplier<URI> tokenEndpoint, ClientID clientID, Secret clientSecret,
-            AuthorizationGrant authorizationGrant, Scope scope, int connectTimeout, int readTimeout) {
+            AuthorizationGrant authorizationGrant, Scope scope, int connectTimeout, int readTimeout, Map<String, List<String>> headers) {
         this.tokenEndpoint = tokenEndpoint;
         this.clientID = clientID;
         this.clientSecret = clientSecret;
@@ -47,6 +52,7 @@ class OpenIDProviderImpl implements OpenIDProvider<BearerAccessToken, RefreshTok
         this.scope = scope;
         this.connectTimeout = connectTimeout;
         this.readTimeout = readTimeout;
+        this.headers = headers;
     }
 
     @Override
@@ -71,6 +77,11 @@ class OpenIDProviderImpl implements OpenIDProvider<BearerAccessToken, RefreshTok
         HTTPRequest httpRequest = request.toHTTPRequest();
         httpRequest.setConnectTimeout(connectTimeout);
         httpRequest.setReadTimeout(readTimeout);
+
+        if (headers != null) {
+            headers.forEach((key, value) -> httpRequest.setHeader(key, value.toArray(new String[0])));
+        }
+
         HTTPResponse httpResponse;
         try {
             httpResponse = httpRequest.send();
