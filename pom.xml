@@ -3,7 +3,7 @@
 
     <groupId>com.premiumminds.oidc</groupId>
     <artifactId>oidc-token-manager</artifactId>
-    <version>1.3-SNAPSHOT</version>
+    <version>1.3</version>
     <packaging>jar</packaging>
 
     <name>OpenID Connector Token Manager Client for Java</name>
@@ -30,7 +30,7 @@
         <connection>scm:git:git@github.com:premium-minds/oidc-token-manager-java.git</connection>
         <developerConnection>scm:git:git@github.com:premium-minds/oidc-token-manager-java.git
         </developerConnection>
-        <tag>HEAD</tag>
+        <tag>v1.3</tag>
     </scm>
 
     <developers>
